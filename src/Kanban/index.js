@@ -250,7 +250,6 @@ class Kanban extends PureComponent {
       overscanListCount,
       scrollToList,
       scrollToAlignment,
-      dndDisabled,
     } = this.props;
 
     return (
