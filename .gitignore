@@ -3,10 +3,10 @@
 # dependencies
 node_modules
 
-# production
+# production (Comment out lib/ when releasing to production)
 build
 dist
-lib
+#lib
 
 # misc
 .DS_Store
