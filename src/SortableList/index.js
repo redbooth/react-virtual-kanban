@@ -50,6 +50,7 @@ class SortableList extends PureComponent {
         dragBeginRow={this.props.dragBeginRow}
         dragEndRow={this.props.dragEndRow}
         findItemIndex={this.props.findItemIndex}
+        dndDisabled={this.props.dndDisabled}
       />
     );
   }

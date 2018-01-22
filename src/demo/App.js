@@ -44,6 +44,7 @@ class App extends Component {
           onDropList={(data) => console.log(data, 'onDropList') }
           onDragBeginList={(data) => console.log(data, 'onDragBeginList')}
           onDragEndList={(data) => console.log(data, 'onDragEndList')}
+          dndDisabled={false}
         />
       </div>
     );

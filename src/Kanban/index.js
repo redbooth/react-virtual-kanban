@@ -51,6 +51,7 @@ class Kanban extends PureComponent {
     overscanListCount: 2,
     overscanRowCount: 2,
     itemCacheKey: ({ id }) => `${id}`,
+    dndDisabled: false,
   }
 
   static childContextTypes = {
@@ -222,6 +223,7 @@ class Kanban extends PureComponent {
         overscanRowCount={this.props.overscanRowCount}
         itemCacheKey={this.props.itemCacheKey}
         findItemIndex={this.findItemIndex}
+        dndDisabled={this.props.dndDisabled}
       />
     );
   }
