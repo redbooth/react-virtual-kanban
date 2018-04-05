@@ -21,8 +21,6 @@ import SortableList from '../SortableList';
 
 import { DragDropManager } from 'dnd-core';
 
-import PureComponent from '../PureComponent';
-
 /**
  * Grab dragDropManager from context
  *
