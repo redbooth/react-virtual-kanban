@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AutoSizer } from 'react-virtualized';
+import shuffle from 'lodash.shuffle';
 
 import { VirtualKanban } from '../';
 

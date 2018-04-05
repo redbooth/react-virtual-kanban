@@ -22,7 +22,6 @@ class SortableList extends PureComponent {
     super(props);
 
     this.renderRow = this.renderRow.bind(this);
-    this.renderItemForMeasure = this.renderItemForMeasure.bind(this);
     this.renderList = this.renderList.bind(this);
   }
 
@@ -124,9 +123,7 @@ class SortableList extends PureComponent {
         connectDragSource={connectDragSource}
         connectDropTarget={connectDropTarget}
       >
-        <AutoSizer>
-          {(dimensions) => this.renderList(dimensions)}
-        </AutoSizer>
+        {this.renderList()}
       </DecoratedList>
     );
   }

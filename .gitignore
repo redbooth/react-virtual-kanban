@@ -4,9 +4,9 @@
 node_modules
 
 # production
-build
+#build
 dist
-lib
+#lib
 
 # misc
 .DS_Store

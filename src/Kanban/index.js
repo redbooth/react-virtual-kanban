@@ -1,8 +1,9 @@
 import React from 'react';
 import HTML5Backend from 'react-dnd-html5-backend';
 import withScrolling, { createHorizontalStrength } from 'react-dnd-scrollzone';
-import { Grid } from 'react-virtualized';
 import scrollbarSize from 'dom-helpers/util/scrollbarSize';
+import PureComponent from '../PureComponent';
+import scrollIntoView from 'scroll-into-view';
 
 import {
   updateLists,
@@ -14,11 +15,10 @@ import {
 
 import * as propTypes from './propTypes';
 import * as decorators from '../decorators';
+import shallowCompare from 'react-addons-shallow-compare';
 import DragLayer from '../DragLayer';
 import SortableList from '../SortableList';
 
-const GridWithScrollZone = withScrolling(Grid);
-const horizontalStrength = createHorizontalStrength(200);
 import { DragDropManager } from 'dnd-core';
 
 import PureComponent from '../PureComponent';
@@ -90,6 +90,15 @@ class Kanban extends PureComponent {
     return {
       dragDropManager: getDndContext(this.context),
     };
+  }
+
+  scrollToList(index) {
+    if (index === undefined) {
+      return;
+    }
+
+    const targetNode = ReactDOM.findDOMNode(this.refsByIndex[index]);
+    scrollIntoView(targetNode);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -202,10 +211,8 @@ class Kanban extends PureComponent {
     this.props.onDragEndList(this.listEndData({ listId }));
   }
 
-  componentDidUpdate(_prevProps, prevState) {
-    if (prevState.lists !== this.state.lists) {
-      this._grid.wrappedInstance.forceUpdate();
-    }
+  findItemIndex(itemId) {
+    return findItemIndex(this.state.lists, itemId);
   }
 
   findItemIndex(itemId) {
@@ -217,6 +224,7 @@ class Kanban extends PureComponent {
 
     return (
       <SortableList
+        ref={ref => this.refsByIndex[columnIndex] = ref}
         key={list.id}
         listId={list.id}
         listStyle={style}
@@ -253,27 +261,12 @@ class Kanban extends PureComponent {
     } = this.props;
 
     return (
-      <div>
-        <GridWithScrollZone
-          lists={lists}
-          className='KanbanGrid'
-          // Needed for fixing disappearing items when scrolling
-          containerStyle={{pointerEvents: 'auto'}}
-          ref={(c) => (this._grid = c)}
-          width={width}
-          height={height}
-          columnWidth={listWidth}
-          rowHeight={height - scrollbarSize()}
-          columnCount={lists.length}
-          rowCount={1}
-          cellRenderer={this.renderList}
-          overscanColumnCount={overscanListCount}
-          horizontalStrength={horizontalStrength}
-          scrollToColumn={scrollToList}
-          scrollToAlignment={scrollToAlignment}
-          verticalStrength={() => {}}
-          speed={100}
-        />
+      <div
+        className="KanbanGrid"
+        style={{pointerEvents: 'auto'}}
+        ref={(c) => (this._grid = c)}
+      >
+        {lists.map(this.renderList)}
         <DragLayer
           lists={lists}
           itemPreviewComponent={itemPreviewComponent}
