@@ -1,10 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import HTML5Backend from 'react-dnd-html5-backend';
 import withScrolling, { createHorizontalStrength } from 'react-dnd-scrollzone';
 import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 import { Grid, CellMeasurerCache } from 'react-virtualized';
-import scrollIntoView from 'scroll-into-view';
 
 import {
   updateLists,
@@ -26,8 +24,6 @@ const HORIZONTAL_SCROLL_STRENGTH = 200;
 const horizontalStrength = createHorizontalStrength(HORIZONTAL_SCROLL_STRENGTH);
 import { DragDropManager } from 'dnd-core';
 
-import PureComponent from '../PureComponent';
-
 /**
  * Grab dragDropManager from context
  *
@@ -37,7 +33,7 @@ const getDndContext = ((dragDropManager = new DragDropManager(HTML5Backend)) => 
   context.dragDropManager || dragDropManager
 ))();
 
-class Kanban extends PureComponent {
+class Kanban extends React.PureComponent {
   static propTypes = propTypes;
 
   static defaultProps = {
@@ -74,10 +70,11 @@ class Kanban extends PureComponent {
       lists: props.lists,
     };
 
-    this.cache = new CellMeasurerCache({
+    this.kanbanCache = new CellMeasurerCache({
       fixedWidth: true,
       fixedHeight: true,
-    })
+      minWidth: this.props.listWidth,
+    });
 
     this.onMoveList = this.onMoveList.bind(this);
     this.onMoveRow = this.onMoveRow.bind(this);
@@ -110,15 +107,6 @@ class Kanban extends PureComponent {
 
   componentWillUnmount() {
     cancelAnimationFrame(this._requestedFrame);
-  }
-
-  scrollToList(index) {
-    if (index === undefined) {
-      return;
-    }
-
-    const targetNode = ReactDOM.findDOMNode(this.refsByIndex[index]);
-    scrollIntoView(targetNode);
   }
 
   scheduleUpdate(updateFn, callbackFn) {
@@ -227,11 +215,11 @@ class Kanban extends PureComponent {
     return shallowCompare(this, nextProps, nextState);
   }
 
-  // componentDidUpdate(_prevProps, prevState) {
-  //   if (prevState.lists !== this.state.lists) {
-  //     this._grid.wrappedInstance.forceUpdate();
-  //   }
-  // }
+  componentDidUpdate(_prevProps, prevState) {
+    if (prevState.lists !== this.state.lists) {
+      this._grid.wrappedInstance.forceUpdate();
+    }
+  }
 
   findItemIndex(itemId) {
     return findItemIndex(this.state.lists, itemId);
@@ -260,10 +248,11 @@ class Kanban extends PureComponent {
         overscanRowCount={this.props.overscanRowCount}
         findItemIndex={this.findItemIndex}
         dndDisabled={this.props.dndDisabled}
-        parent={parent}
+        kanbanParent={parent}
+        kanbanCache={this.kanbanCache}
+        kanbanKey={key}
         columnIndex={columnIndex}
         rowIndex={rowIndex}
-        cache={this.cache}
       />
     );
   }
@@ -273,11 +262,10 @@ class Kanban extends PureComponent {
     const {
       width,
       height,
-      listWidth,
       itemPreviewComponent,
       listPreviewComponent,
       overscanListCount,
-      scrollToList,
+      scrollToColumn,
       scrollToAlignment,
     } = this.props;
     return (
@@ -290,18 +278,18 @@ class Kanban extends PureComponent {
           ref={(c) => (this._grid = c)}
           width={width}
           height={height}
-          columnWidth={listWidth}
+          columnWidth={this.kanbanCache.columnWidth}
           rowHeight={height - scrollbarSize()}
           columnCount={lists.length}
           rowCount={1}
           cellRenderer={this.renderList}
           overscanColumnCount={overscanListCount}
           horizontalStrength={horizontalStrength}
-          scrollToColumn={scrollToList}
+          scrollToColumn={scrollToColumn}
           scrollToAlignment={scrollToAlignment}
           verticalStrength={() => {}}
           speed={HORIZONTAL_SCROLL_SPEED}
-          deferredMeasurementCache={this.cache}
+          deferredMeasurementCache={this.kanbanCache}
         />
         <DragLayer
           lists={lists}
