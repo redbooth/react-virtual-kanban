@@ -206,10 +206,15 @@ class Kanban extends React.PureComponent {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return shallowCompare(this, nextProps, nextState);
+    const val = shallowCompare(this, nextProps, nextState);
+    return val;
   }
 
   componentDidUpdate(_prevProps, prevState) {
+    const a = _prevProps;
+    const b = this.props;
+    const c = _prevProps.initialColumnIndex === this.props.initialColumnIndex;
+    const c = _prevProps.initialRowIndex === this.props.initialRowIndex;
     if (prevState.lists !== this.state.lists) {
       this._grid.wrappedInstance.forceUpdate();
     }
