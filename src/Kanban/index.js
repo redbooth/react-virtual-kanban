@@ -259,6 +259,7 @@ class Kanban extends React.PureComponent {
       listPreviewComponent,
       overscanListCount,
       initialColumnIndex,
+      dndDisabled,
     } = this.props;
     return (
       <div>
@@ -281,11 +282,14 @@ class Kanban extends React.PureComponent {
           verticalStrength={() => {}}
           speed={HORIZONTAL_SCROLL_SPEED}
         />
-        <DragLayer
-          lists={lists}
-          itemPreviewComponent={itemPreviewComponent}
-          listPreviewComponent={listPreviewComponent}
-        />
+        {
+          !dndDisabled &&
+          <DragLayer
+            lists={lists}
+            itemPreviewComponent={itemPreviewComponent}
+            listPreviewComponent={listPreviewComponent}
+          />
+        }
       </div>
     );
   }
