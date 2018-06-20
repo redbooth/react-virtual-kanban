@@ -86,6 +86,8 @@ class Kanban extends React.PureComponent {
     this.drawFrame = this.drawFrame.bind(this);
     this.findItemIndex = this.findItemIndex.bind(this);
 
+    this.overscanIndicesGetter = this.overscanIndicesGetter.bind(this);
+
     this.refsByIndex = {};
   }
 
@@ -219,7 +221,8 @@ class Kanban extends React.PureComponent {
     return findItemIndex(this.state.lists, itemId);
   }
 
-  overscanIndicesGetter() {
+  overscanIndicesGetter({cellCount}) {
+console.log('defaultOverscanIndicesGetter called: ', cellCount, this, ...arguments);
     return ({
       overscanStartIndex: 0,
       overscanStopIndex: this.state.lists.length - 1,
