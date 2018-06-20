@@ -221,8 +221,10 @@ class Kanban extends React.PureComponent {
     return findItemIndex(this.state.lists, itemId);
   }
 
-  overscanIndicesGetter({cellCount}) {
-console.log('defaultOverscanIndicesGetter called: ', this, ...arguments);
+  /**
+   * Allows us to render the entire virtualized component for printing.
+   */
+  overscanIndicesGetter({ cellCount }) {
     return ({
       overscanStartIndex: 0,
       overscanStopIndex: cellCount - 1,
@@ -271,7 +273,14 @@ console.log('defaultOverscanIndicesGetter called: ', this, ...arguments);
       initialColumnIndex,
       isPrinting,
     } = this.props;
-    const overscanIndicesGetter = isPrinting ? this.overscanIndicesGetter : undefined;
+
+    // Conditionally override the default 'overscanIndicesGetter' function in
+    // react-virtual-grid, which normally tells us to render only enough items
+    // to fill the viewport. If we're not printing the component, then we pass
+    // in 'undefined' so react-virtual-grid uses its defaultOverscanIndicesGetter.
+    const overscanIndicesGetter = isPrinting
+      ? this.overscanIndicesGetter
+      : undefined;
 
     return (
       <div>
