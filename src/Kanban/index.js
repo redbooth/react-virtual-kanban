@@ -221,8 +221,8 @@ class Kanban extends React.PureComponent {
     return findItemIndex(this.state.lists, itemId);
   }
 
-  overscanIndicesGetter({cellCount}) {
-console.log('defaultOverscanIndicesGetter called: ', cellCount, this, ...arguments);
+  overscanIndicesGetter(args) {
+console.log('defaultOverscanIndicesGetter called: ', this, ...arguments);
     return ({
       overscanStartIndex: 0,
       overscanStopIndex: this.state.lists.length - 1,
