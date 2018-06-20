@@ -219,6 +219,13 @@ class Kanban extends React.PureComponent {
     return findItemIndex(this.state.lists, itemId);
   }
 
+  overscanIndicesGetter({cellCount}) {
+    return ({
+      overscanStartIndex: 0,
+      overscanStopIndex: cellCount - 1,
+    });
+  }
+
   renderList({ columnIndex, rowIndex, key, style, parent }) {
     const list = this.state.lists[columnIndex];
 
@@ -259,7 +266,10 @@ class Kanban extends React.PureComponent {
       listPreviewComponent,
       overscanListCount,
       initialColumnIndex,
+      isPrinting,
     } = this.props;
+    const overscanIndicesGetter = isPrinting ? this.overscanIndicesGetter : undefined;
+
     return (
       <div>
         <GridWithScrollZone
@@ -280,6 +290,7 @@ class Kanban extends React.PureComponent {
           scrollToColumn={initialColumnIndex}
           verticalStrength={() => {}}
           speed={HORIZONTAL_SCROLL_SPEED}
+          overcanIndicesGetter={overscanIndicesGetter}
         />
         <DragLayer
           lists={lists}
