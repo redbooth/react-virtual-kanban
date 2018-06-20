@@ -269,9 +269,9 @@ console.log('defaultOverscanIndicesGetter called: ', this, ...arguments);
       listPreviewComponent,
       overscanListCount,
       initialColumnIndex,
-      // isPrinting,
+      isPrinting,
     } = this.props;
-    const overscanIndicesGetter = this.overscanIndicesGetter; //isPrinting ? this.overscanIndicesGetter : undefined;
+    const overscanIndicesGetter = isPrinting ? this.overscanIndicesGetter : undefined;
 
     return (
       <div>
