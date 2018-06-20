@@ -293,7 +293,7 @@ console.log('defaultOverscanIndicesGetter called: ', this, ...arguments);
           scrollToColumn={initialColumnIndex}
           verticalStrength={() => {}}
           speed={HORIZONTAL_SCROLL_SPEED}
-          overcanIndicesGetter={overscanIndicesGetter}
+          overscanIndicesGetter={overscanIndicesGetter}
         />
         <DragLayer
           lists={lists}
