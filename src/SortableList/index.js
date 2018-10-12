@@ -48,7 +48,11 @@ class SortableList extends React.PureComponent {
 
   findHighestUpdatedRow(rows, prevRows) {
     if (!window._) return null;
-    return window._.findIndex(rows, (row, i) => !window._.isEqual(row, prevRows[i]));
+    for (let i = 0; i < rows.length; i++) {
+      if (!window._.isEqual(rows[i], prevRows[i])) return i;
+    }
+
+    return null;
   }
 
   recalculateRowHeights(index) {
