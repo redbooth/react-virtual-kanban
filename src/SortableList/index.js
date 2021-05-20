@@ -29,6 +29,7 @@ class SortableList extends React.PureComponent {
     });
     this.renderRow = this.renderRow.bind(this);
     this.renderList = this.renderList.bind(this);
+    this.cachedHeight = 0;
     this.recalculateRowHeights = this.recalculateRowHeights.bind(this);
   }
 
@@ -94,13 +95,17 @@ class SortableList extends React.PureComponent {
   }
 
   renderList({ width, height }) {
+    if (height !== 0) {
+      this.cachedHeight = height;
+    }
+
     // TODO: Check whether scrollbar is visible or not :/
     return (
       <ListWithScrollZone
         ref={(c) => (this._list = c)}
         className='KanbanList'
         width={width}
-        height={height}
+        height={height === 0 ? this.cachedHeight : height}
         rowHeight={this.cache.rowHeight}
         rowCount={this.props.list.rows.length}
         rowRenderer={this.renderRow}
