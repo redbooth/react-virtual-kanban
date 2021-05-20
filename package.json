@@ -106,6 +106,7 @@
   },
   "scripts": {
     "build:clean": "rm -rf ./lib ./dist",
+    "build:lib:watch": "NODE_ENV=production BABEL_ENV=commonjs babel src --out-dir lib --ignore src/demo/ --ignore src/**/__tests__ --watch",
     "build:lib": "NODE_ENV=production BABEL_ENV=commonjs babel src --out-dir lib --ignore src/demo/ --ignore src/**/__tests__",
     "build:umd": "NODE_ENV=production webpack --config config/webpack.config.umd.js --bail",
     "build:demo": "node ./scripts/build.js",
